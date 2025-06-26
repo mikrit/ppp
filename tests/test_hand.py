@@ -30,3 +30,18 @@ def test_wheel_straight():
     rank, aux = evaluate_best_hand(cards)
     assert rank == HandRank.STRAIGHT
     assert aux == [3]
+
+def test_two_pair_example():
+    """Player with Qd Jh vs board Jd 9d Qh 4c 7h should make two pair"""
+    cards = make_cards('Qd', 'Jh', 'Jd', '9d', 'Qh', '4c', '7h')
+    rank, aux = evaluate_best_hand(cards)
+    assert rank == HandRank.TWO_PAIR
+    assert aux == [10, 9, 7]
+
+
+def test_high_card_example():
+    """Opponent with 6c 5h should only have high card"""
+    cards = make_cards('6c', '5h', 'Jd', '9d', 'Qh', '4c', '7h')
+    rank, aux = evaluate_best_hand(cards)
+    assert rank == HandRank.HIGH_CARD
+    assert aux == [10, 9, 7, 5, 4]
