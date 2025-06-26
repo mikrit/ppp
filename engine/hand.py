@@ -26,20 +26,17 @@ def _rank_five(cards: List[Card]) -> Tuple[int, List[int]]:
     counts_only = [c for _, c in counts_sorted]
 
     is_flush = len(set(suits)) == 1
-    uniq = sorted(set(ranks), reverse=True)
-    # check straight
+    # straight detection
     is_straight = False
     high_straight = None
-    if len(uniq) >= 5:
-        for i in range(len(uniq) - 4 + 1):
-            span = uniq[i:i+5]
-            if span[0] - span[-1] == 4:
-                is_straight = True
-                high_straight = span[0]
-                break
-    if not is_straight and set([12, 3, 2, 1, 0]).issubset(ranks):
+    uniq_asc = sorted(set(ranks))
+    if len(uniq_asc) == 5 and uniq_asc[-1] - uniq_asc[0] == 4:
         is_straight = True
-        high_straight = 3  # five-high straight
+        high_straight = uniq_asc[-1]
+    elif set([12, 3, 2, 1, 0]) == set(ranks):
+        # wheel straight A-2-3-4-5
+        is_straight = True
+        high_straight = 3
 
     if is_straight and is_flush:
         return HandRank.STRAIGHT_FLUSH.value, [high_straight]
