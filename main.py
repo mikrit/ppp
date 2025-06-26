@@ -15,8 +15,12 @@ def main() -> None:
         print(f"{p.name}: {p.hole_cards}")
     print(f"Community: {game.community}")
 
-    winner, rank, _ = game.best_player()
-    print(f"Winner: {winner.name} with {rank.name}")
+    winners, rank, _ = game.best_player()
+    if len(winners) == 1:
+        print(f"Winner: {winners[0].name} with {rank.name}")
+    else:
+        names = ', '.join(w.name for w in winners)
+        print(f"Tie between {names} with {rank.name}")
 
 
 if __name__ == "__main__":

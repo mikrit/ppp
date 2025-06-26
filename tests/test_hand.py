@@ -6,6 +6,8 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
 from engine.card import Card
 from engine.hand import evaluate_best_hand, HandRank
+from engine.player import Player
+from engine.game import Game
 
 
 def make_cards(*codes):
@@ -45,3 +47,15 @@ def test_high_card_example():
     rank, aux = evaluate_best_hand(cards)
     assert rank == HandRank.HIGH_CARD
     assert aux == [10, 9, 7, 5, 4]
+
+
+def test_split_pot_two_pair():
+    p1 = Player('You')
+    p2 = Player('Bot')
+    game = Game([p1, p2])
+    game.community = make_cards('7c', 'Jc', '2s', 'Jh', '7h')
+    p1.hole_cards = make_cards('3d', '8h')
+    p2.hole_cards = make_cards('8d', '4h')
+    winners, rank, _ = game.best_player()
+    assert rank == HandRank.TWO_PAIR
+    assert set(w.name for w in winners) == {'You', 'Bot'}
